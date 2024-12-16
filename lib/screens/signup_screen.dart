@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:insta_clone2/data/firebase_services/firebase_auth.dart';
+import 'package:insta_clone2/screens/home.dart';
 import 'package:insta_clone2/utils/dialog.dart';
 import 'dart:io' as io;
 import 'package:insta_clone2/utils/exceptions.dart';
 import 'package:insta_clone2/utils/imagepicker.dart';
+
+import '../utils/widgets/widgets.dart';
 
 class SignupScreen extends StatefulWidget {
   final VoidCallback show;
@@ -55,15 +58,15 @@ class _SignupScreenState extends State<SignupScreen> {
             SizedBox(
               height: 60.h,
             ),
-            InkWell(
-              onTap: () async {
-                io.File _imagefilee =
-                    await ImagePickerr().uploadImage('gallary');
-                setState(() {
-                  _imageFile = _imagefilee;
-                });
-              },
-              child: Center(
+            Center(
+              child: InkWell(
+                onTap: () async {
+                  io.File _imagefilee =
+                      await ImagePickerr().uploadImage('camera');
+                  setState(() {
+                    _imageFile = _imagefilee;
+                  });
+                },
                 child: CircleAvatar(
                   radius: 36.r,
                   backgroundColor: Colors.green,
@@ -88,20 +91,20 @@ class _SignupScreenState extends State<SignupScreen> {
             SizedBox(
               height: 50.h,
             ),
-            Textfield(email, Icons.email, 'Email', email_F),
+            Widgets().Textfield(email, Icons.email, 'Email', email_F),
             SizedBox(height: 25.h),
-            Textfield(password, Icons.lock, 'Password', password_F),
+            Widgets().Textfield(password, Icons.lock, 'Password', password_F),
             SizedBox(height: 25.h),
-            Textfield(username, Icons.person, 'Username', username_F),
+            Widgets().Textfield(username, Icons.person, 'Username', username_F),
             SizedBox(height: 25.h),
-            Textfield(bio, Icons.abc, 'Bio', bio_F),
+            Widgets().Textfield(bio, Icons.abc, 'Bio', bio_F),
             SizedBox(height: 25.h),
-            Textfield(passwordConfirme, Icons.lock, 'PasswordConfirme',
-                passwordConfirme_F),
+            Widgets().Textfield(passwordConfirme, Icons.lock,
+                'PasswordConfirme', passwordConfirme_F),
             SizedBox(
               height: 20.h,
             ),
-            Signup(() async {
+            Widgets().IsSignup(() async {
               try {
                 await Authentication().Signup(
                     email: email.text,
@@ -109,102 +112,21 @@ class _SignupScreenState extends State<SignupScreen> {
                     passwordConfirme: passwordConfirme.text,
                     username: username.text,
                     bio: bio.text,
-                    profile: _imageFile ?? io.File(''));
+                    profile: _imageFile!);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Home()));
               } on exceptions catch (e) {
+                print('error======>${e.message}');
                 dialogBuilder(context, e.message);
               }
-            }),
+            }, true),
             SizedBox(
               height: 10.h,
             ),
-            Have()
+            Widgets().Have(widget.show, true),
           ],
         ),
       )),
-    );
-  }
-
-  Widget Have() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            "Already have an account?",
-            style: TextStyle(fontSize: 13.sp, color: Colors.grey),
-          ),
-          GestureDetector(
-            onTap: widget.show,
-            child: Text(
-              " Log in ",
-              style: TextStyle(
-                  fontSize: 15.sp,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget Signup(VoidCallback onTap) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.w),
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          alignment: Alignment.center,
-          width: double.infinity,
-          height: 44.h,
-          decoration: BoxDecoration(
-              color: Colors.black, borderRadius: BorderRadius.circular(10.r)),
-          child: Text(
-            'Sign up',
-            style: TextStyle(
-                fontSize: 23.sp,
-                color: Colors.white,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget Textfield(TextEditingController controller, IconData icon, String type,
-      FocusNode focusNode) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10.w),
-      child: Container(
-        height: 44.h,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5.r),
-        ),
-        child: TextField(
-          style: TextStyle(fontSize: 18.sp, color: Colors.black),
-          controller: controller,
-          focusNode: focusNode,
-          decoration: InputDecoration(
-            hintText: type,
-            prefixIcon: Icon(
-              icon,
-              color: focusNode.hasFocus ? Colors.black : Colors.grey,
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.r),
-              borderSide: BorderSide(color: Colors.grey, width: 2.w),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.r),
-              borderSide: BorderSide(color: Colors.black, width: 2.w),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
