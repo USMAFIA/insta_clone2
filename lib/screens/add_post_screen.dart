@@ -18,7 +18,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   io.File? _file;
   int currentPage = 0;
   int? lastPage;
-  int indexx = 0;
+
 
   Future<void> _fetchNewMedia() async {
     if (kDebugMode) {
@@ -31,10 +31,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
       print('getting permission-----------');
     }
     if (ps.isAuth) {
-      print('in if statement checking for isAuth???????????');
+      if (kDebugMode) {
+        print('in if statement checking for isAuth???????????');
+      }
 
       final List<AssetPathEntity> album =
-      await PhotoManager.getAssetPathList(onlyAll: true);
+      await PhotoManager.getAssetPathList(type: RequestType.image);
       if (kDebugMode) {
         print('album is empty? ========>${album.isEmpty}');
       }
@@ -108,6 +110,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
     _fetchNewMedia();
   }
 
+  int indexx = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,7 +128,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
             padding: EdgeInsets.symmetric(horizontal: 10.w),
             child: InkWell(
               onTap: (){
-                _file != null ? Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddPostTextScreen(_file!))) : print('--------the file is empty--------');
+                _file != null ? Navigator.of(context).push(MaterialPageRoute(builder: (context)=> AddPostTextScreen(_file!))) :
+                print('--------the file is empty--------');
               },
               child: Center(
                 child: Text(
@@ -188,7 +193,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      print('${indexx} <====1====> ${index}');
+                      if (kDebugMode) {
+                        print('${indexx} <====1====> ${index}');
+                      }
                       setState(() {
                         indexx = index;
                         _file = path[index];

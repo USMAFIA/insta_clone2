@@ -19,6 +19,10 @@ class Authentication {
     } on FirebaseAuthException catch (e) {
       throw exceptions(e.message ??
           'An unknown error occurred with Firebase in logging in the user.');
+    } on exceptions catch (e) {
+      rethrow;
+    } catch (e) {
+      throw exceptions('An unexpected error occurred in logging in: $e');
     }
   }
 
@@ -98,4 +102,5 @@ class Authentication {
       throw exceptions('An unexpected error occurred: $e');
     }
   }
+
 }

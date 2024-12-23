@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:insta_clone2/data/firebase_services/firebase_auth.dart';
-import 'package:insta_clone2/screens/home.dart';
 import 'package:insta_clone2/utils/dialog.dart';
 import 'dart:io' as io;
 import 'package:insta_clone2/utils/exceptions.dart';
 import 'package:insta_clone2/utils/imagepicker.dart';
 
+import '../utils/widgets/navigation.dart';
 import '../utils/widgets/widgets.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -112,9 +112,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     passwordConfirme: passwordConfirme.text,
                     username: username.text,
                     bio: bio.text,
-                    profile: _imageFile!);
+                    profile: _imageFile!
+                );
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Home()));
+                    MaterialPageRoute(builder: (context) => const Navigations()));
               } on exceptions catch (e) {
                 print('error======>${e.message}');
                 dialogBuilder(context, e.message);

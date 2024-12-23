@@ -46,7 +46,7 @@ class _AddScreenState extends State<AddScreen> {
             PageView(
               controller: pageController,
               onPageChanged: onPageChange,
-              children: [
+              children: const [
                 AddPostScreen(),
                 AddReelScreen(),
               ],

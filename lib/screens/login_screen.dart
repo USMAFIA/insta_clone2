@@ -5,6 +5,7 @@ import 'package:insta_clone2/utils/widgets/widgets.dart';
 
 import '../utils/dialog.dart';
 import '../utils/exceptions.dart';
+import '../utils/widgets/navigation.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback show;
@@ -48,8 +49,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Widgets().IsSignup(() async {
               try {
-                await Authentication()
-                    .Login(email: email.text, password: password.text);
+                await Authentication().Login(email: email.text, password: password.text);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Navigations()));
               } on exceptions catch (e) {
                 print('error======>${e.message}');
                 dialogBuilder(context, e.message);

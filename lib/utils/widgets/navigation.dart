@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:insta_clone2/screens/explor_screen.dart';
+import 'package:insta_clone2/screens/explore.dart';
 import 'package:insta_clone2/screens/home.dart';
 import 'package:insta_clone2/screens/profile_screen.dart';
 import 'package:insta_clone2/screens/reels_screen.dart';
@@ -17,10 +18,12 @@ int _currentIndex = 0;
 
 class _NavigationsState extends State<Navigations> {
   late PageController pageController;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void initState() {
     super.initState();
     pageController = PageController();
+    _currentIndex = 0;
   }
 
   @override
@@ -48,7 +51,7 @@ class _NavigationsState extends State<Navigations> {
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey[500],
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home,size: 25,), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.search,size: 25,), label: ''),
           BottomNavigationBarItem(icon: Icon(Icons.add_circle,size: 25,),label: ''),
@@ -57,14 +60,17 @@ class _NavigationsState extends State<Navigations> {
         ],
       ),
       body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
         onPageChanged: onPageChange,
         children: [
-          Home(),
-          ExplorScreen(),
-          AddScreen(),
-          ReelsScreen(),
-          ProfileScreen(),
+          const Home(),
+          const ExploreScreen(),
+          const AddScreen(),
+          const ReelsScreen(),
+          ProfileScreen(
+            Uid: _auth.currentUser!.uid,
+          ),
         ],
       ),
     );

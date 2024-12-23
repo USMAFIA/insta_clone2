@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:insta_clone2/data/firebase_services/firestore.dart';
@@ -32,14 +33,23 @@ class _AddPostTextScreenState extends State<AddPostTextScreen> {
                     isLoading = true;
                   });
                   final cloudinary = CloudinaryPublic('dbnrlfylq', 'sotg4hri');
+                  if (kDebugMode) {
+                    print('this is file path${widget._file.path}');
+                  }
                   CloudinaryResponse response = await cloudinary.uploadFile(
                     CloudinaryFile.fromFile(widget._file.path),
                   );
                   String post_url = response.secureUrl;
-                  await Firebase_Firestore().CreateUser(
+                  if (kDebugMode) {
+                    print('this is post url${post_url}');
+                  }
+                  bool isuserCreated = await Firebase_Firestore().CreatePost(
                     postImage: post_url,
                       caption: caption.text,
                       location: location.text,);
+                  if (kDebugMode) {
+                    print('is user created?${isuserCreated}');
+                  }
                   Navigator.of(context).pop();
                 },
                 child: Text('Share',style: TextStyle(color: Colors.blue,fontSize: 15.sp),)),
